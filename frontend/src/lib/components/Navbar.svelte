@@ -29,14 +29,13 @@
 
 <nav class="navbar" class:scrolled>
   <div class="nav-container">
-    <!-- Logo -->
     <a href="/" class="nav-logo">
-      <!-- Reemplaza con tu logo: <img src="/images/logo.png" alt="ServiLlantas" /> -->
       <span class="logo-icon">🛞</span>
-      <span class="logo-text">Servi<span class="text-primary">Llantas</span></span>
+      <span class="logo-text">
+        Servi<span class="logo-highlight">Llantas</span>
+      </span>
     </a>
 
-    <!-- Links desktop -->
     <ul class="nav-links" class:active={menuOpen}>
       {#each navLinks as link}
         <li>
@@ -50,20 +49,17 @@
           </a>
         </li>
       {/each}
-      <!-- CTA en mobile -->
       <li class="nav-cta-mobile">
-        <a href="tel:+524611203488" class="btn btn-primary">
+        <a href="tel:+524611203488" class="btn btn-accent">
           📞 461 120 3488
         </a>
       </li>
     </ul>
 
-    <!-- CTA desktop -->
-    <a href="tel:+524611203488" class="btn btn-primary nav-cta-desktop">
+    <a href="tel:+524611203488" class="btn btn-accent nav-cta-desktop">
       📞 Llámanos
     </a>
 
-    <!-- Hamburger -->
     <button
       class="hamburger"
       class:open={menuOpen}
@@ -77,7 +73,6 @@
   </div>
 </nav>
 
-<!-- Overlay para cerrar menú en mobile -->
 {#if menuOpen}
   <div class="nav-overlay" on:click={closeMenu} on:keydown={closeMenu}></div>
 {/if}
@@ -95,7 +90,7 @@
   }
 
   .navbar.scrolled {
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(22, 17, 47, 0.95);
     backdrop-filter: blur(20px);
     padding: 0.6rem 0;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
@@ -124,6 +119,10 @@
     font-size: 2rem;
   }
 
+  .logo-highlight {
+    color: var(--color-accent);
+  }
+
   .nav-links {
     display: flex;
     align-items: center;
@@ -139,10 +138,14 @@
     color: var(--color-light-3);
   }
 
-  .nav-link:hover,
+  .nav-link:hover {
+    color: var(--color-accent);
+    background: rgba(243, 253, 1, 0.08);
+  }
+
   .active-link {
-    color: var(--color-primary);
-    background: rgba(230, 57, 70, 0.1);
+    color: var(--color-accent);
+    background: rgba(243, 253, 1, 0.1);
   }
 
   .nav-cta-desktop {
@@ -154,7 +157,6 @@
     display: none;
   }
 
-  /* ====== HAMBURGER ====== */
   .hamburger {
     display: none;
     flex-direction: column;
@@ -177,11 +179,9 @@
   .hamburger.open span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 6px);
   }
-
   .hamburger.open span:nth-child(2) {
     opacity: 0;
   }
-
   .hamburger.open span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -6px);
   }
@@ -193,20 +193,10 @@
     z-index: 999;
   }
 
-  /* ====== RESPONSIVE ====== */
   @media (max-width: 768px) {
-    .hamburger {
-      display: flex;
-    }
-
-    .nav-cta-desktop {
-      display: none;
-    }
-
-    .nav-cta-mobile {
-      display: block;
-      margin-top: 1rem;
-    }
+    .hamburger { display: flex; }
+    .nav-cta-desktop { display: none; }
+    .nav-cta-mobile { display: block; margin-top: 1rem; }
 
     .nav-links {
       position: fixed;
@@ -215,7 +205,7 @@
       width: 280px;
       height: 100vh;
       flex-direction: column;
-      background: var(--color-dark-2);
+      background: var(--color-primary);
       padding: 5rem 2rem 2rem;
       gap: 0.5rem;
       align-items: flex-start;
@@ -224,9 +214,7 @@
       box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
     }
 
-    .nav-links.active {
-      right: 0;
-    }
+    .nav-links.active { right: 0; }
 
     .nav-link {
       font-size: 1.1rem;

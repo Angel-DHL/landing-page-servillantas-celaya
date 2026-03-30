@@ -3,11 +3,10 @@
   <div class="footer-top">
     <div class="container">
       <div class="footer-grid">
-        <!-- Columna 1: Logo e info -->
         <div class="footer-col">
           <a href="/" class="footer-logo">
             <span class="logo-icon">🛞</span>
-            Servi<span class="text-primary">Llantas</span>
+            Servi<span class="text-accent">Llantas</span>
           </a>
           <p class="footer-desc">
             Expertos en llantas y servicio automotriz en Celaya.
@@ -20,7 +19,6 @@
           </div>
         </div>
 
-        <!-- Columna 2: Servicios -->
         <div class="footer-col">
           <h4 class="footer-title">Servicios</h4>
           <ul>
@@ -33,7 +31,6 @@
           </ul>
         </div>
 
-        <!-- Columna 3: Links -->
         <div class="footer-col">
           <h4 class="footer-title">Empresa</h4>
           <ul>
@@ -43,7 +40,6 @@
           </ul>
         </div>
 
-        <!-- Columna 4: Contacto -->
         <div class="footer-col">
           <h4 class="footer-title">Contacto</h4>
           <ul class="contact-list">
@@ -65,7 +61,6 @@
     </div>
   </div>
 
-  <!-- Footer bottom -->
   <div class="footer-bottom">
     <div class="container">
       <p>© {new Date().getFullYear()} ServiLlantas Celaya. Todos los derechos reservados.</p>
@@ -75,7 +70,7 @@
 
 <style>
   .footer {
-    background: var(--color-dark-2);
+    background: var(--color-primary);
     border-top: 1px solid var(--color-dark-4);
   }
 
@@ -99,9 +94,7 @@
     margin-bottom: 1rem;
   }
 
-  .logo-icon {
-    font-size: 1.8rem;
-  }
+  .logo-icon { font-size: 1.8rem; }
 
   .footer-desc {
     color: var(--color-gray);
@@ -130,7 +123,7 @@
   }
 
   .social-link:hover {
-    background: var(--color-primary);
+    background: var(--color-secondary);
     transform: translateY(-3px);
   }
 
@@ -148,7 +141,7 @@
     left: 0;
     width: 30px;
     height: 3px;
-    background: var(--color-primary);
+    background: var(--color-accent);
     border-radius: 2px;
   }
 
@@ -166,7 +159,7 @@
   }
 
   .footer-col ul a:hover {
-    color: var(--color-primary);
+    color: var(--color-accent);
   }
 
   .contact-list li {
@@ -187,15 +180,9 @@
   }
 
   @media (max-width: 768px) {
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   }
-
   @media (max-width: 480px) {
-    .footer-grid {
-      grid-template-columns: 1fr;
-    }
+    .footer-grid { grid-template-columns: 1fr; }
   }
 </style>
