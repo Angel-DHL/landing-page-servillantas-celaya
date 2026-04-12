@@ -1,35 +1,32 @@
 <!-- frontend/src/routes/+page.svelte -->
+<!-- REEMPLAZA TODO EL ARCHIVO -->
 <script>
   import { onMount } from 'svelte';
   import { inview } from '$lib/actions/inview.js';
+  import PlaceholderImage from '$lib/components/PlaceholderImage.svelte';
 
+  // ===== COUNTERS =====
   let counters = [
     { target: 15, current: 0, suffix: '+', label: 'Años de experiencia' },
     { target: 10000, current: 0, suffix: '+', label: 'Clientes satisfechos' },
     { target: 50000, current: 0, suffix: '+', label: 'Servicios realizados' },
     { target: 100, current: 0, suffix: '%', label: 'Garantía' }
   ];
-
   let countersStarted = false;
 
   function startCounters() {
     if (countersStarted) return;
     countersStarted = true;
-
     counters.forEach((counter, i) => {
-      const duration = 2000;
       const steps = 60;
       const increment = counter.target / steps;
       let current = 0;
       const interval = setInterval(() => {
         current += increment;
-        if (current >= counter.target) {
-          current = counter.target;
-          clearInterval(interval);
-        }
+        if (current >= counter.target) { current = counter.target; clearInterval(interval); }
         counters[i].current = Math.floor(current);
         counters = counters;
-      }, duration / steps);
+      }, 2000 / steps);
     });
   }
 
@@ -57,7 +54,11 @@
 
 <!-- ========== HERO ========== -->
 <section class="hero">
+  <div class="hero-bg">
+    <PlaceholderImage type="hero" height="100%" text="" />
+  </div>
   <div class="hero-overlay"></div>
+
   <div class="hero-particles">
     {#each Array(20) as _, i}
       <div class="particle" style="--delay: {i * 0.5}s; --x: {Math.random() * 100}%; --duration: {3 + Math.random() * 4}s"></div>
@@ -112,8 +113,10 @@
 
     <div class="services-grid">
       {#each servicios as servicio, i}
-        <div class="service-card fade-up delay-{i + 1}" use:inview>
-          <span class="service-icon">{servicio.icon}</span>
+        <div class="service-card fade-up delay-{Math.min(i + 1, 6)}" use:inview>
+          <div class="service-icon-wrapper">
+            <span class="service-icon">{servicio.icon}</span>
+          </div>
           <h3>{servicio.titulo}</h3>
           <p>{servicio.desc}</p>
           <a href="/servicios" class="service-link">Ver más →</a>
@@ -134,43 +137,25 @@
         </h2>
 
         <div class="why-list">
-          <div class="why-item fade-left delay-1" use:inview>
-            <div class="why-icon">✅</div>
-            <div>
-              <h4>Equipo de última generación</h4>
-              <p>Tecnología computarizada para resultados precisos en cada servicio.</p>
+          {#each [
+            { icon: '✅', title: 'Equipo de última generación', desc: 'Tecnología computarizada para resultados precisos en cada servicio.' },
+            { icon: '⚡', title: 'Servicio rápido y eficiente', desc: 'Respetamos tu tiempo. Servicio ágil sin sacrificar calidad.' },
+            { icon: '🛡️', title: 'Garantía en todos los trabajos', desc: 'Respaldamos cada servicio con garantía escrita.' },
+            { icon: '💰', title: 'Precios competitivos', desc: 'La mejor relación calidad-precio del mercado en Celaya.' }
+          ] as item, i}
+            <div class="why-item fade-left delay-{i + 1}" use:inview>
+              <div class="why-icon">{item.icon}</div>
+              <div>
+                <h4>{item.title}</h4>
+                <p>{item.desc}</p>
+              </div>
             </div>
-          </div>
-          <div class="why-item fade-left delay-2" use:inview>
-            <div class="why-icon">⚡</div>
-            <div>
-              <h4>Servicio rápido y eficiente</h4>
-              <p>Respetamos tu tiempo. Servicio ágil sin sacrificar calidad.</p>
-            </div>
-          </div>
-          <div class="why-item fade-left delay-3" use:inview>
-            <div class="why-icon">🛡️</div>
-            <div>
-              <h4>Garantía en todos los trabajos</h4>
-              <p>Respaldamos cada servicio con garantía escrita.</p>
-            </div>
-          </div>
-          <div class="why-item fade-left delay-4" use:inview>
-            <div class="why-icon">💰</div>
-            <div>
-              <h4>Precios competitivos</h4>
-              <p>La mejor relación calidad-precio del mercado en Celaya.</p>
-            </div>
-          </div>
+          {/each}
         </div>
       </div>
 
       <div class="why-image fade-right" use:inview>
-        <div class="why-image-placeholder">
-          <span>🔧</span>
-          <p>Imagen del taller</p>
-          <small>Coloca tu foto en static/images/taller.jpg</small>
-        </div>
+        <PlaceholderImage type="taller" height="450px" text="Imagen del taller" />
       </div>
     </div>
   </div>
@@ -206,12 +191,13 @@
     <div class="testimonials-grid">
       {#each testimonios as testimonio, i}
         <div class="testimonial-card fade-up delay-{i + 1}" use:inview>
+          <div class="testimonial-quote">"</div>
           <div class="testimonial-stars">
             {#each Array(testimonio.rating) as _}
               <span>⭐</span>
             {/each}
           </div>
-          <p class="testimonial-text">"{testimonio.texto}"</p>
+          <p class="testimonial-text">{testimonio.texto}</p>
           <div class="testimonial-author">
             <div class="author-avatar">{testimonio.nombre.charAt(0)}</div>
             <span class="author-name">{testimonio.nombre}</span>
@@ -229,10 +215,12 @@
     <h2 class="section-title fade-up" use:inview>
       Las <span class="text-accent">mejores marcas</span> del mercado
     </h2>
-    <div class="brands-grid fade-up delay-1" use:inview>
-      {#each marcas as marca}
-        <div class="brand-item"><span>{marca}</span></div>
-      {/each}
+    <div class="brands-marquee fade-up delay-1" use:inview>
+      <div class="brands-track">
+        {#each [...marcas, ...marcas] as marca}
+          <div class="brand-item"><span>{marca}</span></div>
+        {/each}
+      </div>
     </div>
   </div>
 </section>
@@ -261,8 +249,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/images/hero-bg.jpg') center/cover no-repeat;
-    background-color: var(--color-primary);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-bg :global(.placeholder) {
+    border-radius: 0;
+    height: 100% !important;
   }
 
   .hero-overlay {
@@ -270,352 +267,138 @@
     inset: 0;
     background: linear-gradient(
       135deg,
-      rgba(22, 17, 47, 0.92) 0%,
-      rgba(22, 17, 47, 0.7) 50%,
-      rgba(0, 75, 188, 0.3) 100%
+      rgba(22, 17, 47, 0.88) 0%,
+      rgba(22, 17, 47, 0.65) 50%,
+      rgba(0, 75, 188, 0.25) 100%
     );
     z-index: 1;
   }
 
-  /* Partículas flotantes */
-  .hero-particles {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-  }
-
+  .hero-particles { position: absolute; inset: 0; z-index: 2; overflow: hidden; }
   .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--color-accent);
-    border-radius: 50%;
-    left: var(--x);
-    bottom: -10px;
-    opacity: 0;
+    position: absolute; width: 4px; height: 4px; background: var(--color-accent);
+    border-radius: 50%; left: var(--x); bottom: -10px; opacity: 0;
     animation: floatUp var(--duration) var(--delay) infinite;
   }
-
-  @keyframes floatUp {
-    0% { opacity: 0; transform: translateY(0) scale(0); }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.2; }
-    100% { opacity: 0; transform: translateY(-100vh) scale(1); }
-  }
+  @keyframes floatUp { 0%{opacity:0;transform:translateY(0) scale(0)} 10%{opacity:.6} 90%{opacity:.2} 100%{opacity:0;transform:translateY(-100vh) scale(1)} }
 
   .hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 2rem;
-    max-width: 800px;
-    animation: fadeInUp 1s ease;
+    position: relative; z-index: 3; text-align: center; padding: 2rem; max-width: 800px;
   }
 
   .hero-subtitle {
-    color: var(--color-accent);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 4px;
-    margin-bottom: 1rem;
+    color: var(--color-accent); font-family: var(--font-heading); font-weight: 700;
+    font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 1rem;
     animation: fadeInUp 1s ease 0.2s both;
   }
+  .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1.5rem; animation: fadeInUp 1s ease 0.4s both; }
+  .hero-desc { color: var(--color-light-3); font-size: 1.15rem; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.8; animation: fadeInUp 1s ease 0.6s both; }
+  .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeInUp 1s ease 0.8s both; }
+  .btn-lg { padding: 1rem 2.5rem; font-size: 1.05rem; }
 
-  .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    margin-bottom: 1.5rem;
-    animation: fadeInUp 1s ease 0.4s both;
-  }
-
-  .hero-desc {
-    color: var(--color-light-3);
-    font-size: 1.15rem;
-    max-width: 600px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.8;
-    animation: fadeInUp 1s ease 0.6s both;
-  }
-
-  .hero-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeInUp 1s ease 0.8s both;
-  }
-
-  .btn-lg {
-    padding: 1rem 2.5rem;
-    font-size: 1.05rem;
-  }
-
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-  }
-
-  .scroll-line {
-    width: 2px;
-    height: 40px;
-    background: var(--color-accent);
-    animation: scrollPulse 2s infinite;
-    border-radius: 2px;
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0; transform: scaleY(0.5); transform-origin: top; }
-    50% { opacity: 1; transform: scaleY(1); }
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3; }
+  .scroll-line { width: 2px; height: 40px; background: var(--color-accent); animation: scrollPulse 2s infinite; border-radius: 2px; }
+  @keyframes scrollPulse { 0%,100%{opacity:0;transform:scaleY(.5);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 
   /* ====== STATS ====== */
-  .stats-section {
-    background: var(--color-secondary);
-    padding: 3rem 0;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    text-align: center;
-  }
-
-  .stat-number {
-    display: block;
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 2.5rem;
-    color: var(--color-accent);
-  }
-
-  .stat-label {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin-top: 0.3rem;
-  }
+  .stats-section { background: var(--color-secondary); padding: 3rem 0; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; text-align: center; }
+  .stat-number { display: block; font-family: var(--font-heading); font-weight: 900; font-size: 2.5rem; color: var(--color-accent); }
+  .stat-label { font-size: .9rem; color: rgba(255,255,255,.85); margin-top: .3rem; }
 
   /* ====== SERVICES ====== */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 1rem;
-  }
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 1rem; }
 
   .service-card {
-    background: var(--color-dark-3);
-    border: 1px solid var(--color-dark-4);
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
+    background: var(--color-dark-3); border: 1px solid var(--color-dark-4);
+    border-radius: 16px; padding: 2.5rem 2rem; text-align: center;
+    transition: all .4s; position: relative; overflow: hidden;
   }
+  .service-card::before { content:''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--color-secondary), var(--color-accent)); transform: scaleX(0); transition: transform .4s; }
+  .service-card:hover { transform: translateY(-8px); border-color: var(--color-secondary); box-shadow: 0 20px 40px rgba(0,75,188,.2); }
+  .service-card:hover::before { transform: scaleX(1); }
 
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
+  .service-icon-wrapper {
+    width: 70px; height: 70px; margin: 0 auto 1rem;
+    background: rgba(0,75,188,.1); border: 2px solid rgba(0,75,188,.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: all .3s;
   }
+  .service-card:hover .service-icon-wrapper { background: var(--color-secondary); border-color: var(--color-secondary); transform: scale(1.1); }
 
-  .service-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--color-secondary);
-    box-shadow: 0 20px 40px rgba(0, 75, 188, 0.2);
-  }
+  .service-icon { font-size: 2rem; }
+  .service-card h3 { font-size: 1.2rem; margin-bottom: .8rem; font-weight: 700; }
+  .service-card p { color: var(--color-gray); font-size: .9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .service-link { color: var(--color-accent); font-weight: 600; font-size: .9rem; transition: all .3s; }
+  .service-link:hover { color: var(--color-light); letter-spacing: 1px; }
 
-  .service-card:hover::before {
-    transform: scaleX(1);
-  }
-
-  .service-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-  .service-card h3 { font-size: 1.2rem; margin-bottom: 0.8rem; font-weight: 700; }
-  .service-card p { color: var(--color-gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
-
-  .service-link {
-    color: var(--color-accent);
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-  }
-
-  .service-link:hover {
-    color: var(--color-light);
-    letter-spacing: 1px;
-  }
-
-  /* ====== WHY SECTION ====== */
-  .why-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-  }
-
+  /* ====== WHY ====== */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
   .why-list { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
-
   .why-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .why-icon { font-size: 1.5rem; width: 50px; height: 50px; background: rgba(0,75,188,.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .why-item h4 { font-size: 1.05rem; margin-bottom: .3rem; font-weight: 700; }
+  .why-item p { color: var(--color-gray); font-size: .9rem; }
 
-  .why-icon {
-    font-size: 1.5rem;
-    width: 50px;
-    height: 50px;
-    background: rgba(0, 75, 188, 0.15);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .why-item h4 { font-size: 1.05rem; margin-bottom: 0.3rem; font-weight: 700; }
-  .why-item p { color: var(--color-gray); font-size: 0.9rem; }
-
-  .why-image-placeholder {
-    background: var(--color-dark-3);
-    border: 2px dashed var(--color-dark-4);
-    border-radius: 16px;
-    height: 450px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    color: var(--color-gray);
-  }
-
-  .why-image-placeholder span { font-size: 4rem; }
-  .why-image-placeholder small { font-size: 0.8rem; color: var(--color-dark-4); }
-
-  /* ====== CTA BANNER ====== */
-  .cta-banner {
-    position: relative;
-    padding: 5rem 0;
-    background: url('/images/hero-bg.jpg') center/cover no-repeat fixed;
-    background-color: var(--color-primary);
-  }
-
-  .cta-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0, 75, 188, 0.9), rgba(22, 17, 47, 0.92));
-  }
-
-  .cta-banner h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 1rem; }
-  .cta-desc { color: rgba(255, 255, 255, 0.8); font-size: 1.1rem; margin-bottom: 2rem; }
+  /* ====== CTA ====== */
+  .cta-banner { position: relative; padding: 5rem 0; background-color: var(--color-primary); }
+  .cta-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,75,188,.9), rgba(22,17,47,.92)); }
+  .cta-banner h2 { font-size: clamp(1.8rem,4vw,2.8rem); margin-bottom: 1rem; }
+  .cta-desc { color: rgba(255,255,255,.8); font-size: 1.1rem; margin-bottom: 2rem; }
   .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
   /* ====== TESTIMONIALS ====== */
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 1rem; }
   .testimonial-card {
-    background: var(--color-dark-3);
-    border: 1px solid var(--color-dark-4);
-    border-radius: 16px;
-    padding: 2rem;
-    text-align: left;
-    transition: all 0.3s ease;
+    background: var(--color-dark-3); border: 1px solid var(--color-dark-4);
+    border-radius: 16px; padding: 2rem; text-align: left;
+    transition: all .3s; position: relative;
   }
-
-  .testimonial-card:hover {
-    border-color: var(--color-secondary);
-    transform: translateY(-4px);
-  }
-
+  .testimonial-card:hover { border-color: var(--color-secondary); transform: translateY(-4px); }
+  .testimonial-quote { position: absolute; top: 1rem; right: 1.5rem; font-size: 4rem; font-family: serif; color: var(--color-secondary); opacity: .2; line-height: 1; }
   .testimonial-stars { margin-bottom: 1rem; font-size: 1.1rem; }
+  .testimonial-text { color: var(--color-light-3); font-size: .95rem; line-height: 1.7; font-style: italic; margin-bottom: 1.5rem; }
+  .testimonial-author { display: flex; align-items: center; gap: .8rem; }
+  .author-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--color-secondary); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; }
+  .author-name { font-weight: 600; font-size: .95rem; }
 
-  .testimonial-text {
-    color: var(--color-light-3);
-    font-size: 0.95rem;
-    line-height: 1.7;
-    font-style: italic;
-    margin-bottom: 1.5rem;
+  /* ====== BRANDS MARQUEE ====== */
+  .brands-marquee { overflow: hidden; margin-top: 2rem; }
+  .brands-track {
+    display: flex; gap: 1.5rem;
+    animation: marquee 25s linear infinite;
+    width: max-content;
   }
-
-  .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
-
-  .author-avatar {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: var(--color-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.2rem;
-  }
-
-  .author-name { font-weight: 600; font-size: 0.95rem; }
-
-  /* ====== BRANDS ====== */
-  .brands-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    margin-top: 1rem;
-  }
-
+  .brands-track:hover { animation-play-state: paused; }
   .brand-item {
-    background: var(--color-dark-3);
-    border: 1px solid var(--color-dark-4);
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--color-light-3);
-    transition: all 0.3s ease;
+    background: var(--color-dark-3); border: 1px solid var(--color-dark-4);
+    border-radius: 12px; padding: 1.2rem 2rem; display: flex;
+    align-items: center; justify-content: center;
+    font-family: var(--font-heading); font-weight: 700; font-size: .95rem;
+    color: var(--color-light-3); transition: all .3s; white-space: nowrap;
+    flex-shrink: 0;
   }
+  .brand-item:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
-  .brand-item:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    transform: translateY(-3px);
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   /* ====== RESPONSIVE ====== */
-  @media (max-width: 1024px) {
-    .services-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
+  @media (max-width: 1024px) { .services-grid, .testimonials-grid { grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
     .services-grid, .testimonials-grid { grid-template-columns: 1fr; }
     .why-grid { grid-template-columns: 1fr; }
-    .brands-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-title { font-size: clamp(2rem, 7vw, 3rem); }
-    .btn-lg { padding: 0.9rem 1.8rem; font-size: 0.95rem; }
+    .hero-title { font-size: clamp(2rem,7vw,3rem); }
+    .btn-lg { padding: .9rem 1.8rem; font-size: .95rem; }
   }
-
   @media (max-width: 480px) {
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     .stat-number { font-size: 2rem; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .cta-buttons .btn { width: 100%; justify-content: center; }
   }
 </style>
